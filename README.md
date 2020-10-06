@@ -27,6 +27,15 @@ $this->formRequest(UpdatePost::class, [
 ])
 ```
 
+or you can use the intuitive methods to set form request method and data
+```php
+$this->formRequest(UpdatePost::class)
+->post([
+    'title' => 'New Title',
+    'content' => 'Some Content here'
+])
+```
+
 the previous code will intialize the request with `post` method and `/fake-route` if you want to change these options you can via the options array that can be set as a third argument
 
 ```php
@@ -40,6 +49,16 @@ $this->formRequest(UpdatePost::class, [
 ```
 
 if you're using `$this->route` method in your form request or other related methods, then your form request won't be authorized unless you set the right http method and route via the `$options` array in order to get the right value for `$this->route` method
+
+Intuitive methods were also introduced to make setting the route easier
+```php
+$this->formRequest(UpdatePost::class)
+->put([
+    'title' => 'New Title',
+    'content' => 'Some Content here'
+])
+->withRoute('posts/{post}')
+````
 
 2. use the available assertions to test for request
 
@@ -77,6 +96,21 @@ $this->formRequest(UpdatePost::class,[
 ->assertValidationMessages(['Content field is required'])
 ```
 
+you can now use intuitive methods to build form request
+```php
+$this->formRequest(UpdatePost::class)
+->put([
+    'title' => 'New Title'
+])
+->withRoute('posts/{post}')
+->assertAuthorized()
+->assertValidationFailed()
+->assertValidationErrors(['content'])
+->assertValidationErrorsMissing(['title'])
+->assertValidationMessages(['Content field is required'])
+```
+
 ## Contributors:
 
 1. [Mohammed Manssour](https://mohammedmanssour.me)
+2. [Bryan Pedroza](https://www.bryanpedroza.com/)
